@@ -1,3 +1,70 @@
+server:
+  port: ${SERVER_NEWS_SERVICE_PORT:8081}
+
 spring:
   application:
     name: tech-news-service
+
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/{DB_NEWS_NAME:tech-news-db}
+    username: ${DB_USER:auth_user}
+    password: ${DB_PASSWORD:secret}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: ${JPA_DDL_AUTO:validate}
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+    flyway:
+      enabled: true
+
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.add.type.headers: false
+
+# Feign Client Dev.to
+devto:
+  api:
+    url: https://dev.to/api
+    tag: java
+    per-page: 20
+
+# Job de collecte
+news:
+  fetcher:
+    enabled: true
+    fixed-delay-ms: 300000   # 5 minutes
+
+# ===============================
+# JWT CONFIGURATION (même secret que l'Auth Service)
+# ===============================
+jwt:
+  private-key-path: ${PRIVATE_KEY_PATH:}   # variable d'env Jenkins
+  public-key-path: ${PUBLIC_KEY_PATH:}     # variable d'env Jenkins
+
+# Kafka topics
+kafka:
+  topics:
+    tech-news: tech-news
+
+# Actuator
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always
+
+logging:
+  level:
+    com.newstech: DEBUG
+    org.springframework.kafka: INFO

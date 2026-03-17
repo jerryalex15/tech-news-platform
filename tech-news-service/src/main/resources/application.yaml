@@ -33,6 +33,7 @@ spring:
 devto:
   api:
     url: https://dev.to/api
+    keys: ${DEVTO_API_KEYS} # en local : $export DEVTO_API_KEYS=ton_api_key
     tag: java
     per-page: 20
 
@@ -52,7 +53,7 @@ jwt:
 # Kafka topics
 kafka:
   topics:
-    tech-news: tech-news
+    tech-news: tech-news-topic
 
 # Actuator
 management:

@@ -31,3 +31,6 @@ CREATE UNIQUE INDEX idx_external_id ON news_article(external_id);
 
 -- index utile pour recherche par tags
 CREATE INDEX idx_news_article_tags ON news_article(tags);
+
+-- index utile pour supprimer les anciens articles en fonction de fetched_at
+CREATE INDEX idx_news_article_fetched_at ON news_article(fetched_at DESC);

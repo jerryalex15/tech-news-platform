@@ -64,6 +64,10 @@ management:
   endpoint:
     health:
       show-details: always
+  db:
+    schedule:
+      clean-ms: 480000 # 8mn
+      limit : 50
 
 logging:
   level:

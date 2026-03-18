@@ -2,6 +2,7 @@ package com.challenge.tech_news_service.job;
 
 import com.challenge.tech_news_service.client.DevToClient;
 import com.challenge.tech_news_service.dto.DevToArticleDto;
+import com.challenge.tech_news_service.entity.NewsArticle;
 import com.challenge.tech_news_service.service.NewsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 

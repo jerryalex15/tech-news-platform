@@ -20,7 +20,7 @@ public class NewsController {
 
     /**
      * GET /api/news?page=0&size=10
-     * GET /api/news?tag=kafka&page=0&size=10
+     * GET /api/news?tag=java&page=0&size=10
      */
     @GetMapping
     public ResponseEntity<Page<NewsArticleResponse>> lister(

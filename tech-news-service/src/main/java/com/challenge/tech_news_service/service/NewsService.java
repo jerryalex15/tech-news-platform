@@ -8,8 +8,10 @@ import com.challenge.tech_news_service.kafka.NewsEventProducer;
 import com.challenge.tech_news_service.repository.NewsArticleRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,8 +22,20 @@ import java.util.UUID;
 @Slf4j
 public class NewsService {
 
-    private final NewsArticleRepository repository;
+    private final NewsArticleRepository newsArticleRepository;
     private final NewsEventProducer producer;
+
+    @Value("${management.db.schedule.limit:50}")
+    private int limit;
+
+    /**
+     * Nettoie la base de données et garde seulement le n derniers éléments publiés
+     */
+    @Transactional
+    @Scheduled(fixedDelayString = "${management.db.schedule.clean-ms:600000}")
+    public void cleanOldArticles() {
+        newsArticleRepository.deleteOlderThan(limit);
+    }
 
     /**
      * Traite un article Dev.to :
@@ -32,13 +46,13 @@ public class NewsService {
     public boolean processIfNew(DevToArticleDto dto) {
         String externalId = String.valueOf(dto.getId());
 
-        if (repository.existsByExternalId(externalId)) {
+        if (newsArticleRepository.existsByExternalId(externalId)) {
             log.debug("Article déjà connu, ignoré : [{}] {}", externalId, dto.getTitle());
             return false;
         }
 
         NewsArticle article = mapToEntity(dto, externalId);
-        NewsArticle saved = repository.save(article);
+        NewsArticle saved = newsArticleRepository.save(article);
 
         log.info("Nouvel article sauvegardé : [{}] {}", externalId, saved.getTitle());
 
@@ -49,18 +63,18 @@ public class NewsService {
     }
 
     public Page<NewsArticleResponse> getArticles(Pageable pageable) {
-        return repository.findAllByOrderByPublishedAtDesc(pageable)
+        return newsArticleRepository.findAllByOrderByPublishedAtDesc(pageable)
                 .map(NewsArticleResponse::from);
     }
 
     public Page<NewsArticleResponse> getArticlesByTag(String tag, Pageable pageable) {
-        return repository.findByTagsContainingIgnoreCaseOrderByPublishedAtDesc(tag, pageable)
+        return newsArticleRepository.findByTagsContainingIgnoreCaseOrderByPublishedAtDesc(tag, pageable)
                 .map(NewsArticleResponse::from);
     }
 
 
     public NewsArticleResponse getArticleById(UUID id) {
-        return repository.findById(id)
+        return newsArticleRepository.findById(id)
                 .map(NewsArticleResponse::from)
                 .orElseThrow(() -> new RuntimeException("Article introuvable : " + id));
     }

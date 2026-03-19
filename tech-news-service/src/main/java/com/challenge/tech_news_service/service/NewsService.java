@@ -57,7 +57,7 @@ public class NewsService {
         log.info("Nouvel article sauvegardé : [{}] {}", externalId, saved.getTitle());
 
         NewsCreatedEvent event = mapToEvent(saved);
-        producer.publier(event);
+        producer.publish(event);
 
         return true;
     }

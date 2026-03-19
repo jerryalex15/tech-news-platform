@@ -16,7 +16,7 @@ public class KafkaTopicConfig {
     public NewTopic topicTechNews() {
         return TopicBuilder.name(topicTechNews)
                 .partitions(3)
-                .replicas(1)
+                .replicas(3)
                 .build();
     }
 }

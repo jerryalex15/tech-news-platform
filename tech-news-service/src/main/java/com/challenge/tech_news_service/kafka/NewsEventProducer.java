@@ -20,7 +20,7 @@ public class NewsEventProducer {
     @Value("${kafka.topics.tech-news}")
     private String topicTechNews;
 
-    public void publier(NewsCreatedEvent event) {
+    public void publish(NewsCreatedEvent event) {
         // La clé = articleId pour garantir l'ordre par article dans une partition
         String key = event.getArticleId().toString();
 

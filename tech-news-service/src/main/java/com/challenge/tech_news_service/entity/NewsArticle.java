@@ -9,7 +9,9 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "news_article", indexes = {
-        @Index(name = "idx_external_id", columnList = "externalId", unique = true)
+        @Index(name = "idx_external_id",       columnList = "external_id", unique = true),
+        @Index(name = "idx_news_article_tags",      columnList = "tags"),
+        @Index(name = "idx_news_article_fetched_at", columnList = "fetched_at")
 })
 @Getter
 @Setter

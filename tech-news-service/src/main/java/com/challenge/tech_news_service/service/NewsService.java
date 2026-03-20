@@ -15,6 +15,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
@@ -104,8 +105,8 @@ public class NewsService {
                 .authorName(article.getAuthorName())
                 .tags(article.getTags())
                 .coverImageUrl(article.getCoverImageUrl())
-                .publishedAt(article.getPublishedAt())
-                .fetchedAt(article.getFetchedAt())
+                .publishedAt(article.getPublishedAt() != null ? article.getPublishedAt().toString() : null)
+                .fetchedAt(article.getFetchedAt() != null ? article.getFetchedAt().toString() : LocalDateTime.now().toString())
                 .build();
     }
 }

@@ -1,5 +1,6 @@
 package com.challenge.tech_news_service.client;
 
+import com.challenge.tech_news_service.config.FeignConfig;
 import com.challenge.tech_news_service.dto.DevToArticleDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
-@FeignClient(name = "devto-client", url = "${devto.api.url}")
+@FeignClient(name = "devto-client", url = "${devto.api.url}", configuration = FeignConfig.class)
 public interface DevToClient {
 
     /**

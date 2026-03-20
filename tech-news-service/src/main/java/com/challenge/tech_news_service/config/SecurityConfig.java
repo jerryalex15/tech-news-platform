@@ -47,28 +47,6 @@ public class SecurityConfig {
         this.jwtFilter = jwtFilter;
     }
 
-    // Bean PublicKey — injecté dans JwtAuthFilter via @RequiredArgsConstructor
-    @Bean
-    public PublicKey publicKey() throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
-        String keyContent;
-        if (publicKeyPath != null && !publicKeyPath.isBlank()
-                && Files.exists(Paths.get(publicKeyPath))) {
-            keyContent = Files.readString(Paths.get(publicKeyPath));
-        } else {
-            try (InputStream is = publicKeyResource.getInputStream()) {
-                keyContent = new String(is.readAllBytes());
-            }
-        }
-        keyContent = keyContent
-                .replace("-----BEGIN PUBLIC KEY-----", "")
-                .replace("-----END PUBLIC KEY-----", "")
-                .replaceAll("\\s+", "");
-
-        byte[] decoded = Base64.getDecoder().decode(keyContent);
-        return KeyFactory.getInstance("RSA")
-                .generatePublic(new X509EncodedKeySpec(decoded));
-    }
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http){
         http

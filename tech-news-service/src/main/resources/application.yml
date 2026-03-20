@@ -6,20 +6,24 @@ spring:
     name: tech-news-service
 
   datasource:
-    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/{DB_NEWS_NAME:tech-news-db}
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5433}/${DB_NEWS_NAME:tech-news-db}
     username: ${DB_USER:auth_user}
     password: ${DB_PASSWORD:secret}
     driver-class-name: org.postgresql.Driver
 
   jpa:
     hibernate:
-      ddl-auto: ${JPA_DDL_AUTO:validate}
+      ddl-auto: ${JPA_DDL_AUTO:none}
     show-sql: false
     properties:
       hibernate:
         format_sql: true
-    flyway:
-      enabled: true
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5433}/${DB_NEWS_NAME:tech-news-db}
+    user: ${DB_USER:auth_user}
+    password: ${DB_USER:auth_user}
 
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS1:localhost:9092}, ${KAFKA_BOOTSTRAP_SERVERS2:localhost:9093}, ${KAFKA_BOOTSTRAP_SERVERS4:localhost:9094}

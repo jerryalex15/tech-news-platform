@@ -25,6 +25,6 @@ public class NewsCreatedEvent {
     private String authorName;
     private String tags;
     private String coverImageUrl;
-    private LocalDateTime publishedAt;
-    private LocalDateTime fetchedAt;
+    private String publishedAt;
+    private String fetchedAt;
 }

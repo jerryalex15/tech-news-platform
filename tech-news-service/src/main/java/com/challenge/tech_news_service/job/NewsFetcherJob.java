@@ -29,12 +29,13 @@ public class NewsFetcherJob {
     @Value("${devto.api.per-page:20}")
     private int perPage;
 
-    @Value("{devto.api.api.keys")
+    @Value("${devto.api.keys}")
     private String apiKey;
 
-    @Scheduled(fixedDelayString = "${news.fetcher.fixed-delay-ms:300000}")
+    @Scheduled(fixedDelayString = "${news.fetcher.fixed-delay-ms:300000}", initialDelay = 0)
     public void fetchAndPublish() {
-        log.info("Démarrage collecte Dev.to — tag: {}", tag);
+        log.info("Démarrage collecte Dev.to — tag: {}, apiKey présente: {}",
+                tag, apiKey != null && !apiKey.isBlank() ? "OUI [" + apiKey.substring(0, 4) + "...]" : "NON/VIDE");
 
         try {
             List<DevToArticleDto> articles = devToClient.fetchArticles(tag, perPage, 1, apiKey);
